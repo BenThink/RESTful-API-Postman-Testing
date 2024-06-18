@@ -1,0 +1,850 @@
+{
+	"info": {
+		"_postman_id": "1ede4b9c-3729-403d-964b-790e2f3b85f6",
+		"name": "GOAL TRACKER - API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26295684"
+	},
+	"item": [
+		{
+			"name": "Status",
+			"item": [
+				{
+					"name": "GET API - Status",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Validate if the Status Code is 200', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Validate response body', () => {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData.status).to.exist;\r",
+									"    pm.expect(responseData.status).to.eq(\"OPERATIONAL\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Validate if Content-Type is application/json', () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register - User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate Status Code and Response\", () => {\r",
+									"    const responseCode = pm.response.code;\r",
+									"    const responseData = pm.response.json();\r",
+									"    const requestPayload = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									"    pm.expect(responseCode).to.be.oneOf([201, 400]);\r",
+									"\r",
+									"    if (responseCode === 201) {\r",
+									"        pm.test(\"Validate if Response has the required fields: user & its properties\", () => {\r",
+									"            pm.expect(responseData).to.be.an('object');\r",
+									"            pm.expect(responseData.user).to.exist.and.to.be.an('object');\r",
+									"            pm.expect(responseData.user.name).to.be.a('string');\r",
+									"            pm.expect(responseData.user.email).to.be.a('string');\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Validate if Response has the required Content-Type header\", () => {\r",
+									"            pm.expect(pm.response.headers.get(\"Content-Type\")).to.exist.and.to.include(\"application/json\");\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Validate if Response Name and Email match the request payload\", () => {\r",
+									"            pm.expect(responseData.user.name).to.equal(requestPayload.name);\r",
+									"            pm.expect(responseData.user.email).to.equal(requestPayload.email);\r",
+									"        });\r",
+									"\r",
+									"    } else if (responseCode === 400) {\r",
+									"        pm.test(\"Validate the response msg\", () => {\r",
+									"            pm.expect(responseData.msg).to.exist.and.to.be.a('string');\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Validate the content of the response msg\", () => {\r",
+									"            pm.expect(responseData.msg).to.satisfy((msg) => {\r",
+									"                return msg.includes(\"Email address already exists\") || msg.includes(\"Please provide a name, email address and password\");\r",
+									"            })\r",
+									"        });\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestPayload = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									"pm.collectionVariables.set(\"email\", requestPayload.email);\r",
+									"pm.collectionVariables.set(\"password\", requestPayload.password);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"John Rahul Alex\",\r\n    \"email\": \"john_rahul_alex@example.com\",\r\n    \"password\": \"Password123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login - User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseData = pm.response.json();\r",
+									"\r",
+									"pm.collectionVariables.set('token', responseData.token);\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Validate if Response status code is 200\", () => {\r",
+									"        pm.expect(pm.response.code).to.equal(200);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Validate if Response has the required fields - msg and token\", () => {\r",
+									"        pm.expect(responseData).to.have.property('msg').and.to.be.a('string');\r",
+									"        pm.expect(responseData).to.have.property('token').and.to.be.a('string');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Validate if Response msg contains 'Successfully logged in'\", () => {\r",
+									"        pm.expect(responseData.msg).to.equal('Successfully logged in');\r",
+									"    });\r",
+									"} else if (pm.response.code === 401) {\r",
+									"    pm.test(\"Validate if Response status code is 401\", () => {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Validate if Response msg contains 'Invalid Credentials'\", () => {\r",
+									"        pm.expect(responseData.msg).to.equal('Invalid Credentials');\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = pm.variables.replaceIn(pm.collectionVariables.get(\"email\"));\r",
+									"const password = pm.variables.replaceIn(pm.collectionVariables.get(\"password\"));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update - Profile",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let update_Random_UserName = pm.variables.replaceIn(\"{{$randomFullName}}\");\r",
+									"pm.collectionVariables.set('update_Random_UserName', update_Random_UserName);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate if Response status code is 200\", () => {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									" const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate if Response has the required fields - name and email\", () => {\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('name');\r",
+									"    pm.expect(responseData).to.have.property('email');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate if Response 'Name & Email' have correct values\", () => {  \r",
+									"    pm.expect(responseData.name).to.be.a('string').and.to.be.equal(pm.collectionVariables.get('update_Random_UserName'));\r",
+									"    pm.expect(responseData.email).to.be.a('string').and.to.be.equal(pm.collectionVariables.get('email'));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{update_Random_UserName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/updateprofile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"updateprofile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Goals",
+			"item": [
+				{
+					"name": "Create - Goal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let random_GoalTitle = pm.variables.replaceIn(\"{{$randomLoremWord}}\");\r",
+									"pm.collectionVariables.set('random_GoalTitle', random_GoalTitle);\r",
+									"\r",
+									"let random_GoalDescription = pm.variables.replaceIn(\"{{$randomLoremSentences}}\");\r",
+									"pm.collectionVariables.set('random_GoalDescription', random_GoalDescription);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validate if Response 'Status Code' is 201\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate Response 'goal' property\", () =>  {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData).to.have.property('goal');\r",
+									"});\r",
+									"\r",
+									"var responseData = pm.response.json().goal;\r",
+									"\r",
+									"pm.test(\"Validate 'Title' & 'Description' properties within response\", () => {\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.title).to.eq(pm.collectionVariables.get('random_GoalTitle'));\r",
+									"    pm.expect(responseData.description).to.eq(pm.collectionVariables.get('random_GoalDescription'));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate 'status, priority, createdBy, _id, createdAt' properties within response\", () => {\r",
+									"    pm.expect(responseData.status).to.exist.and.to.be.a('string');\r",
+									"    pm.expect(responseData.priority).to.exist.and.to.be.a('string');\r",
+									"    pm.expect(responseData.createdBy).to.exist.and.to.be.a('string');\r",
+									"    pm.expect(responseData._id).to.exist.and.to.be.a('string');\r",
+									"    pm.expect(responseData.createdAt).to.exist.and.to.be.a('string');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"{{random_GoalTitle}}\",\r\n    \"description\": \"{{random_GoalDescription}}\",\r\n    \"priority\": \"high\",\r\n    \"status\": \"to-do\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/goals",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get - Goals",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Filter & Log the 'titles' and 'descriptions' of goals\", () => {\r",
+									"    let isGoalInResponse = false;\r",
+									"\r",
+									"    // check if title & description are in response body\r",
+									"    responseData.goals.forEach((goal) => {\r",
+									"        if(goal.title.includes(pm.collectionVariables.get('random_GoalTitle')) && goal.description.includes(pm.collectionVariables.get('random_GoalDescription'))) {\r",
+									"            isGoalInResponse = true;\r",
+									"        }\r",
+									"    });\r",
+									"\r",
+									"    pm.expect(isGoalInResponse).to.be.true;    \r",
+									"});\r",
+									"\r",
+									"// Store all goals id's in an array\r",
+									"const goalIds = [];\r",
+									"responseData.goals.forEach((goal) => {\r",
+									"    goalIds.push(goal._id);\r",
+									"});\r",
+									"\r",
+									"// Store all goal id's as collection variables\r",
+									"pm.collectionVariables.set('goalIds', JSON.stringify(goalIds));\r",
+									"\r",
+									"// Generate a random index to access a random goal id from the array\r",
+									"const randomIndex = Math.floor(Math.random() * goalIds.length);\r",
+									"\r",
+									"// Log a random selected goal id\r",
+									"console.log(`Random selected goal id: ${goalIds[randomIndex]}`);\r",
+									"\r",
+									"// Store random goal id as a collection variable\r",
+									"pm.collectionVariables.set('goalId', goalIds[randomIndex]);\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/goals",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"goals"
+							]
+						},
+						"description": "The `GET /goals` endpoint retrieves a list of goals. The response returned is a JSON object with a `goals` array containing goal objects. Each goal object has the following properties:\n\n- `_id` (string): The unique identifier for the goal.\n- `title` (string): The title of the goal.\n- `description` (string): The description of the goal.\n- `status` (string): The status of the goal.\n- `priority` (string): The priority of the goal.\n- `createdBy` (string): The user who created the goal.\n- `createdAt` (string): The timestamp when the goal was created.\n    \n\nHere is a JSON schema representing the structure of the response:\n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"goals\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"_id\": { \"type\": \"string\" },\n          \"title\": { \"type\": \"string\" },\n          \"description\": { \"type\": \"string\" },\n          \"status\": { \"type\": \"string\" },\n          \"priority\": { \"type\": \"string\" },\n          \"createdBy\": { \"type\": \"string\" },\n          \"createdAt\": { \"type\": \"string\" }\n        }\n      }\n    }\n  }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Get - Single Goal / Path Var.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Validate if Response status code is 200\", () => {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }); \r",
+									"\r",
+									"    pm.test(\"Validate Response body\", () => {\r",
+									"        pm.expect(responseData).to.be.an('object').that.has.property('goal');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Validate Response body's _id\", () => {\r",
+									"        pm.expect(responseData.goal).to.have.property('_id', pm.collectionVariables.get('goalId'));\r",
+									"    });\r",
+									"\r",
+									"} else if (pm.response.code === 404) {\r",
+									"    pm.test(\"Validate if Response status code is 404\", () => {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Validate Response body\", () => {\r",
+									"        pm.expect(responseData).to.be.an('object').that.has.property('msg', `No goal with id: ${pm.collectionVariables.get('goalId')}`);\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/goals/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"goals",
+								":id"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{goalId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get - Update Goals",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"const payloadBody = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Validate if Response status code is 200\", () => {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }); \r",
+									"\r",
+									"    pm.test(\"Validate Response body\", () => {\r",
+									"        pm.expect(responseData).to.be.an('object').that.has.property('goal');\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Validate Response body's stauts\", () => {\r",
+									"        pm.expect(responseData.goal).to.have.property('status', payloadBody.status);\r",
+									"    });\r",
+									"\r",
+									"} else if (pm.response.code === 404) {\r",
+									"    pm.test(\"Validate if Response status code is 404\", () => {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Validate Response body\", () => {\r",
+									"        pm.expect(responseData).to.be.an('object').that.has.property('msg', `No goal with id: ${pm.collectionVariables.get('goalId')}`);\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"in-progress\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/goals/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"goals",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{goalId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete - Goals",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Validate if Response status code is 200\", () => {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    }); \r",
+									"\r",
+									"    pm.test(\"Validate Response body\", () => {\r",
+									"        pm.expect(responseData).to.be.an('object').that.has.property('msg', \"Success! Goal removed.\");\r",
+									"    });\r",
+									"\r",
+									"} else if (pm.response.code === 404) {\r",
+									"    pm.test(\"Validate if Response status code is 404\", () => {\r",
+									"        pm.response.to.have.status(404);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Validate Response body\", () => {\r",
+									"        pm.expect(responseData).to.be.an('object').that.has.property('msg', `No goal with id: ${pm.collectionVariables.get('goalId')}`);\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/goals/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"goals",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{goalId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Progress",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validate if Response status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"}); \r",
+									"\r",
+									"pm.test(\"Validate Response body\", () => {\r",
+									"    pm.expect(responseData).to.be.an('object').that.has.property('myProgress');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate the Response 'myProgress'\", () => {\r",
+									"    pm.expect(responseData.myProgress).to.have.property('to-do');\r",
+									"    pm.expect(responseData.myProgress).to.have.property('in-progress');\r",
+									"    pm.expect(responseData.myProgress).to.have.property('completed');\r",
+									"    pm.expect(responseData.myProgress).to.have.property('cancelled');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/goals/showprogress",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"goals",
+								"showprogress"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://goal-tracker-api.onrender.com/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "random_GoalTitle",
+			"value": ""
+		},
+		{
+			"key": "random_GoalDescription",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "goalId",
+			"value": ""
+		},
+		{
+			"key": "goalIds",
+			"value": ""
+		},
+		{
+			"key": "update_Random_UserName",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		}
+	]
+}

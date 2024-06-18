@@ -1,0 +1,440 @@
+{
+	"id": "8bdc557b-f7d8-4a65-84d0-d192bb3070c1",
+	"name": "GOAL TRACKER - API",
+	"timestamp": "2024-06-17T21:24:08.740Z",
+	"collection_id": "26295684-1ede4b9c-3729-403d-964b-790e2f3b85f6",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 28,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2024-06-17T21:24:05.712Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "ce65f4c0-6f1f-40de-8c21-1177f811f3c0",
+			"name": "GET API - Status",
+			"url": "https://goal-tracker-api.onrender.com/api/v1/status",
+			"time": 168,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Validate if the Status Code is 200": true,
+				"Validate response body": true,
+				"Validate if Content-Type is application/json": true
+			},
+			"testPassFailCounts": {
+				"Validate if the Status Code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate response body": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate if Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				168
+			],
+			"allTests": [
+				{
+					"Validate if the Status Code is 200": true,
+					"Validate response body": true,
+					"Validate if Content-Type is application/json": true
+				}
+			]
+		},
+		{
+			"id": "6e8bde47-edc4-4d78-82c4-b53016822260",
+			"name": "Register - User",
+			"url": "https://goal-tracker-api.onrender.com/api/v1/auth/register",
+			"time": 193,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Validate the response msg": true,
+				"Validate the content of the response msg": true,
+				"Validate Status Code and Response": true
+			},
+			"testPassFailCounts": {
+				"Validate the response msg": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the content of the response msg": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate Status Code and Response": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				193
+			],
+			"allTests": [
+				{
+					"Validate the response msg": true,
+					"Validate the content of the response msg": true,
+					"Validate Status Code and Response": true
+				}
+			]
+		},
+		{
+			"id": "075e10e4-cf09-4e47-b826-6f76804018a5",
+			"name": "Login - User",
+			"url": "https://goal-tracker-api.onrender.com/api/v1/auth/login",
+			"time": 208,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Validate if Response status code is 200": true,
+				"Validate if Response has the required fields - msg and token": true,
+				"Validate if Response msg contains 'Successfully logged in'": true
+			},
+			"testPassFailCounts": {
+				"Validate if Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate if Response has the required fields - msg and token": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate if Response msg contains 'Successfully logged in'": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				208
+			],
+			"allTests": [
+				{
+					"Validate if Response status code is 200": true,
+					"Validate if Response has the required fields - msg and token": true,
+					"Validate if Response msg contains 'Successfully logged in'": true
+				}
+			]
+		},
+		{
+			"id": "8704fa4a-1031-41ef-9ec8-355cea66914d",
+			"name": "Update - Profile",
+			"url": "https://goal-tracker-api.onrender.com/api/v1/auth/updateprofile",
+			"time": 184,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Validate if Response status code is 200": true,
+				"Validate if Response has the required fields - name and email": true,
+				"Validate if Response 'Name & Email' have correct values": true
+			},
+			"testPassFailCounts": {
+				"Validate if Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate if Response has the required fields - name and email": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate if Response 'Name & Email' have correct values": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				184
+			],
+			"allTests": [
+				{
+					"Validate if Response status code is 200": true,
+					"Validate if Response has the required fields - name and email": true,
+					"Validate if Response 'Name & Email' have correct values": true
+				}
+			]
+		},
+		{
+			"id": "887482b8-ffc0-4e5b-b5f7-e1f96504a717",
+			"name": "Create - Goal",
+			"url": "https://goal-tracker-api.onrender.com/api/v1/goals",
+			"time": 121,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Validate if Response 'Status Code' is 201": true,
+				"Validate Response 'goal' property": true,
+				"Validate 'Title' & 'Description' properties within response": true,
+				"Validate 'status, priority, createdBy, _id, createdAt' properties within response": true
+			},
+			"testPassFailCounts": {
+				"Validate if Response 'Status Code' is 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate Response 'goal' property": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate 'Title' & 'Description' properties within response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate 'status, priority, createdBy, _id, createdAt' properties within response": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				121
+			],
+			"allTests": [
+				{
+					"Validate if Response 'Status Code' is 201": true,
+					"Validate Response 'goal' property": true,
+					"Validate 'Title' & 'Description' properties within response": true,
+					"Validate 'status, priority, createdBy, _id, createdAt' properties within response": true
+				}
+			]
+		},
+		{
+			"id": "88fefee9-71c9-433b-903c-a1ae4189a27d",
+			"name": "Get - Goals",
+			"url": "https://goal-tracker-api.onrender.com/api/v1/goals",
+			"time": 118,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Filter & Log the 'titles' and 'descriptions' of goals": true
+			},
+			"testPassFailCounts": {
+				"Filter & Log the 'titles' and 'descriptions' of goals": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				118
+			],
+			"allTests": [
+				{
+					"Filter & Log the 'titles' and 'descriptions' of goals": true
+				}
+			]
+		},
+		{
+			"id": "ac6d7b78-0b6a-4f2a-b071-c029d1be75dd",
+			"name": "Get - Single Goal / Path Var.",
+			"url": "https://goal-tracker-api.onrender.com/api/v1/goals/666c4a534bb09c72aec7058a",
+			"time": 133,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Validate if Response status code is 200": true,
+				"Validate Response body": true,
+				"Validate Response body's _id": true
+			},
+			"testPassFailCounts": {
+				"Validate if Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate Response body": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate Response body's _id": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				133
+			],
+			"allTests": [
+				{
+					"Validate if Response status code is 200": true,
+					"Validate Response body": true,
+					"Validate Response body's _id": true
+				}
+			]
+		},
+		{
+			"id": "f39df81d-e56f-4f43-90b9-2f93870054d5",
+			"name": "Get - Update Goals",
+			"url": "https://goal-tracker-api.onrender.com/api/v1/goals/666c4a534bb09c72aec7058a",
+			"time": 148,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Validate if Response status code is 200": true,
+				"Validate Response body": true,
+				"Validate Response body's stauts": true
+			},
+			"testPassFailCounts": {
+				"Validate if Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate Response body": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate Response body's stauts": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				148
+			],
+			"allTests": [
+				{
+					"Validate if Response status code is 200": true,
+					"Validate Response body": true,
+					"Validate Response body's stauts": true
+				}
+			]
+		},
+		{
+			"id": "2b43cc02-71a7-449d-85d9-3ae8d923c364",
+			"name": "Delete - Goals",
+			"url": "https://goal-tracker-api.onrender.com/api/v1/goals/666c4a534bb09c72aec7058a",
+			"time": 148,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Validate if Response status code is 200": true,
+				"Validate Response body": true
+			},
+			"testPassFailCounts": {
+				"Validate if Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate Response body": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				148
+			],
+			"allTests": [
+				{
+					"Validate if Response status code is 200": true,
+					"Validate Response body": true
+				}
+			]
+		},
+		{
+			"id": "a7f8a8bc-85f4-4ddb-99bc-6df630c328e4",
+			"name": "Show Progress",
+			"url": "https://goal-tracker-api.onrender.com/api/v1/goals/showprogress",
+			"time": 120,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Validate if Response status code is 200": true,
+				"Validate Response body": true,
+				"Validate the Response 'myProgress'": true
+			},
+			"testPassFailCounts": {
+				"Validate if Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate Response body": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the Response 'myProgress'": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				120
+			],
+			"allTests": [
+				{
+					"Validate if Response status code is 200": true,
+					"Validate Response body": true,
+					"Validate the Response 'myProgress'": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 1541,
+	"collection": {
+		"requests": [
+			{
+				"id": "ce65f4c0-6f1f-40de-8c21-1177f811f3c0",
+				"method": "GET"
+			},
+			{
+				"id": "6e8bde47-edc4-4d78-82c4-b53016822260",
+				"method": "POST"
+			},
+			{
+				"id": "075e10e4-cf09-4e47-b826-6f76804018a5",
+				"method": "POST"
+			},
+			{
+				"id": "8704fa4a-1031-41ef-9ec8-355cea66914d",
+				"method": "PATCH"
+			},
+			{
+				"id": "887482b8-ffc0-4e5b-b5f7-e1f96504a717",
+				"method": "POST"
+			},
+			{
+				"id": "88fefee9-71c9-433b-903c-a1ae4189a27d",
+				"method": "GET"
+			},
+			{
+				"id": "ac6d7b78-0b6a-4f2a-b071-c029d1be75dd",
+				"method": "GET"
+			},
+			{
+				"id": "f39df81d-e56f-4f43-90b9-2f93870054d5",
+				"method": "PATCH"
+			},
+			{
+				"id": "2b43cc02-71a7-449d-85d9-3ae8d923c364",
+				"method": "DELETE"
+			},
+			{
+				"id": "a7f8a8bc-85f4-4ddb-99bc-6df630c328e4",
+				"method": "GET"
+			}
+		]
+	}
+}
