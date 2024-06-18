@@ -1,10 +1,10 @@
 - a project where i've tested RESTful API using Postman
 - the logic flow (CRUD):
-  *-- User:*
+  *User:*
   1. register user
   2. login user
   3. update profile
-  *-- Goals:*
+  *Goals:*
   1. create goal
   2. get goals
   3. get single goal / path variable
