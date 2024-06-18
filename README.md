@@ -1,19 +1,23 @@
-- a project where i've tested RESTful API using Postman
-- the logic flow (CRUD):
+- a project where i've used CRUD to test RESTful API using Postman
+- the logic flow:
   
   *User:*
-  1. register user
-  2. login user
-  3. update profile
+  - register user
+  - login user
+  - update profile
      
   *Goals:*
-  1. create goal
-  2. get goals
-  3. get single goal / path variable
-  4. update goals
-  5. delete goals
-  6. show progress
+  - create goal
+  - get goals
+  - get single goal / path variable
+  - update goals
+  - delete goals
+  - show progress
 - i've used production and collection variables, authorization bearer token, path variables, etc
-- to generate the tests report i've used newman-reporter-htmlextra, where you can find it by clicking on the link below:
-- 
- https://benthink.github.io/API-Postman-Testing/
+- i've created multiple tests for:
+  - different Status Codes, Response Body, Response Headers, etc
+- you can download the file 'GOAL TRACKER - API.postman_collection' and import it into your Postman to see all the work (CRUD, test scripts)
+- if you want to see only the tests results you can download the file 'GOAL TRACKER - API.postman_test_run' and import it into your Postman 
+- or you can just click on the link below where i've used 'newman-reporter-htmlextra' to generate the tests report:
+  
+ https://benthink.github.io/RESTful-API-Postman-Testing/
